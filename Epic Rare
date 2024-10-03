@@ -51,7 +51,7 @@ sound.Looped = true
 sound:Play()
 
     prompt.Triggered:Connect(function(player)
-local random = math.random(1, 4)
+local random = math.random(1, 5)
 box:Destroy()
  if random == 1 then
    if player.Character:FindFirstChild("Gravity Gun") then
