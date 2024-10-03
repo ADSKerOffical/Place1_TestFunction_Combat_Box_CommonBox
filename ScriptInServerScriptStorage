@@ -1,0 +1,349 @@
+local function spawnCommonBox(pos)
+local box = Instance.new("Part", workspace)
+box.Color = Color3.fromRGB(174, 102, 75)
+box.Size = Vector3.new(4, 4, 4)
+box.Name = "Common Rarity Box"
+box.Locked = true
+box.Material = "Wood"
+box.Position = Vector3.new(pos)
+
+local isbreaking = false
+
+box.Touched:Connect(function(hitPart)
+      if hitPart:IsA("BasePart") then
+ if box.AssemblyAngularVelocity.Magnitude > 5 then
+        sound = Instance.new("Sound", box)
+        sound.SoundId = "rbxassetid://9120905757"
+        sound.Volume = 0.25
+        sound.Pitch = 1
+        sound:Play()
+      end
+ end
+    end)
+    
+local prompt = Instance.new("ProximityPrompt")
+    prompt.Name = "Promt"
+    prompt.ObjectText = "Common Box"
+    prompt.ActionText = "Unpack"
+    prompt.HoldDuration = 1.5
+    prompt.KeyboardKeyCode = Enum.KeyCode.E
+    prompt.Parent = box
+    
+    prompt.PromptButtonHoldBegan:Connect(function(player)
+local sound = Instance.new("Sound", box)
+sound.SoundId = "rbxassetid://9120937669"
+sound.Volume = 1
+sound.PlaybackSpeed = 1
+sound.Looped = false
+sound:Play()
+    end)
+
+    prompt.Triggered:Connect(function(player)
+local random = math.random(1, 5)
+box:Destroy()
+if random == 1 then
+tool = game:GetObjects("rbxassetid://3709627518")[1]
+tool.Name = "Metal Pipe"
+tool.ToolTip = "I don't know why you need this, but it would probably be a melee weapon"
+tool.Grip = CFrame.Angles(math.rad(-10), math.rad(0), math.rad(90))
+tool.GripPos = Vector3.new(1, 0, 0)
+tool.Parent = player.Backpack
+
+local lastPressTime = 0
+tool.Activated:Connect(function()
+  local currentTime = tick()
+            if currentTime - lastPressTime >= 0.7 then
+                lastPressTime = currentTime 
+local Anim = Instance.new("Animation")
+Anim.AnimationId = "rbxassetid://209875013"
+local k = player.Character.Humanoid:LoadAnimation(Anim)
+k:Play()
+k:AdjustSpeed(1)
+ task.wait(.1)
+local foundHumanoids = {}
+for _, v in pairs(workspace:GetDescendants()) do
+    if v:IsA("Humanoid") and v.RootPart and v.RootPart.Parent ~= player.Character then
+        local distance = (v.RootPart.Position - tool:FindFirstChild("Handle").Position).magnitude
+        if distance <= 7.5 then
+            table.insert(foundHumanoids, v)
+        end
+    end
+end
+
+for _, humanoid in pairs(foundHumanoids) do
+ humanoid:TakeDamage(15)
+ local recoilDirection = (tool:FindFirstChild("Handle").Position - humanoid.RootPart.Position).Unit
+ humanoid.RootPart.Velocity += recoilDirection * 125
+sound = Instance.new("Sound", tool:FindFirstChild("Handle"))
+sound.SoundId = "rbxassetid://3521543186"
+sound.Volume = 1
+sound.PlaybackSpeed = 1
+sound.Looped = false
+sound:Play()
+end
+            end
+end)
+ elseif random == 2 then
+tool = Instance.new("Tool", player.Backpack)
+tool.Name = "Medicine"
+tool.ToolTip = "Heals you and nearby entities"
+tool.GripPos = Vector3.new(0, 0.5, 0)
+local canheal = false
+
+handle = Instance.new("Part", tool)
+handle.Name = "Handle"
+
+heal = Instance.new("SpecialMesh", handle)
+heal.Scale = Vector3.new(1.2, 1.2, 1.2)
+heal.TextureId = "rbxassetid://16252868042"
+heal.MeshId = "rbxassetid://45021509"
+
+local lastPressTime = 0
+tool.Activated:Connect(function()
+local currentTime = tick()
+            if currentTime - lastPressTime >= 10 then
+                lastPressTime = currentTime
+local foundHumanoids = {}
+for _, v in pairs(workspace:GetDescendants()) do
+    if v:IsA("Humanoid") and v.RootPart then
+        local distance = (v.RootPart.Position - player.Character.HumanoidRootPart.Position).magnitude
+        if distance <= 6 then
+            table.insert(foundHumanoids, v)
+        end
+    end
+end
+
+for _, humanoid in pairs(foundHumanoids) do
+  if humanoid.Health < humanoid.MaxHealth then
+humanoid.Health += 50
+
+sound = Instance.new("Sound", humanoid.RootPart)
+sound.SoundId = "rbxassetid://1655262564"
+sound.Volume = 2
+sound.PlaybackSpeed = 1
+sound.Looped = false
+sound:Play()
+  end
+ end
+end
+end)
+ elseif random == 3 then
+tool = game:GetObjects("rbxassetid://5980936373")[1]
+tool.Parent = player.Backpack
+tool.Name = "Spear"
+tool.Grip = CFrame.Angles(0, math.rad(180), math.rad(-90))
+tool.GripPos = Vector3.new(1.5, 0, 0)
+tool.ToolTip = ""
+
+local handle = tool:FindFirstChild("Handle")
+local tip = tool:FindFirstChild("PrimaryPart")
+
+tool.Equipped:Connect(function()
+local Anim = Instance.new("Animation")
+Anim.AnimationId = "rbxassetid://243761991"
+Anim.Name = "Hold"
+local k = player.Character.Humanoid:LoadAnimation(Anim)
+k:Play()
+k:AdjustSpeed(1)
+end)
+
+tool.Unequipped:Connect(function()
+local animations = player.Character.Humanoid:GetPlayingAnimationTracks()
+for i, animation in ipairs(animations) do
+    if animation.Animation.Name == "Hold" then
+        animation:Stop()
+    end
+end
+end)
+
+local lastPressTime = 0
+tool.Activated:Connect(function()
+  local currentTime = tick()
+            if currentTime - lastPressTime >= 1 then
+                lastPressTime = currentTime 
+local Anim = Instance.new("Animation")
+Anim.AnimationId = "rbxassetid://243764134"
+local k = player.Character.Humanoid:LoadAnimation(Anim)
+k:Play()
+k:AdjustSpeed(1)
+
+sound = Instance.new("Sound", handle)
+sound.SoundId = "http://www.roblox.com/asset/?id=101164100"
+sound.Volume = 1.5
+sound.PlaybackSpeed = 1
+sound.Looped = false
+sound:Play()
+
+local foundHumanoids = {}
+for _, v in pairs(workspace:GetDescendants()) do
+    if v:IsA("Humanoid") and v.RootPart and v.RootPart.Parent ~= player.Character then
+        local distance = (v.RootPart.Position - handle.Position).magnitude
+        if distance <= 6 then
+            table.insert(foundHumanoids, v)
+        end
+    end
+end
+
+for _, humanoid in pairs(foundHumanoids) do
+  humanoid:TakeDamage(20)
+sound = Instance.new("Sound", handle)
+sound.SoundId = "rbxassetid://220834019"
+sound.Volume = 1.5
+sound.PlaybackSpeed = 1
+sound.Looped = false
+sound:Play()
+ local recoilDirection = (handle.Position - humanoid.RootPart.Position).Unit
+ humanoid.RootPart.Velocity += recoilDirection * -100
+end
+            end
+end)
+ elseif random == 4 then
+tool = game:GetObjects("rbxassetid://11986859059")[1]
+tool.Parent = player.Backpack
+tool.Name = "Cleaver"
+tool.ToolTip = "Cut through entities with this small but dangerous knife"
+tool.Grip = CFrame.Angles(math.rad(90), math.rad(90), math.rad(0))
+tool.GripPos = Vector3.new(0, 0, -1.7)
+
+local handle = tool.Handle
+
+for _, script in pairs(tool:GetDescendants()) do
+         if script:IsA("SpecialMesh") then
+script.Scale = script.Scale * 1.6
+         end
+                    end
+
+local lastPressTime = 0
+tool.Activated:Connect(function()
+  local currentTime = tick()
+            if currentTime - lastPressTime >= 1 then
+                lastPressTime = currentTime 
+sound = Instance.new("Sound", handle)
+sound.SoundId = "rbxassetid://2156366946"
+sound.Volume = 1.5
+sound.PlaybackSpeed = 1
+sound.Looped = false
+sound:Play()
+
+local Anim = Instance.new("Animation")
+Anim.AnimationId = "rbxassetid://186934753"
+local k = player.Character.Humanoid:LoadAnimation(Anim)
+k:Play()
+k:AdjustSpeed(1)
+
+local foundHumanoids = {}
+for _, v in pairs(workspace:GetDescendants()) do
+    if v:IsA("Humanoid") and v.RootPart and v.RootPart.Parent ~= player.Character then
+        local distance = (v.RootPart.Position - player.Character.HumanoidRootPart.Position).magnitude
+        if distance <= 4.5 then
+            table.insert(foundHumanoids, v)
+        end
+    end
+end
+
+for _, humanoid in pairs(foundHumanoids) do
+ humanoid:TakeDamage(35)
+ humanoid.RootPart.Velocity = handle.CFrame.LookVector * 50
+ 
+ sound = Instance.new("Sound", humanoid.RootPart)
+sound.SoundId = "rbxassetid://785201669"
+sound.Volume = 1
+sound.PlaybackSpeed = 1
+sound.Looped = false
+sound:Play()
+end
+            end
+end)
+ elseif random == 5 then
+tool = game:GetObjects("rbxassetid://14192799679")[1]
+tool.Parent = player.Backpack
+tool.Name = "Heavy Axe"
+tool.GripPos = Vector3.new(0, 1, 0)
+
+tool.Equipped:Connect(function()
+local Anim = Instance.new("Animation")
+Anim.AnimationId = "rbxassetid://176223120"
+Anim.Name = "Hold"
+local k = player.Character.Humanoid:LoadAnimation(Anim)
+k:Play()
+k:AdjustSpeed(1)
+
+local partTweenn2 = game:GetService("TweenService"):Create(player.Character.Humanoid, TweenInfo.new(1, Enum.EasingStyle.Linear), {
+        WalkSpeed = 11
+    })
+    partTweenn2:Play()
+end)
+
+tool.Unequipped:Connect(function()
+local animations = player.Character.Humanoid:GetPlayingAnimationTracks()
+for i, animation in ipairs(animations) do
+    if animation.Animation.Name == "Hold" then
+        animation:Stop()
+    end
+end
+
+local partTweenn2 = game:GetService("TweenService"):Create(player.Character.Humanoid, TweenInfo.new(1.5, Enum.EasingStyle.Linear), {
+        WalkSpeed = 20
+    })
+    partTweenn2:Play()
+end)
+
+local Anim = Instance.new("Animation")
+Anim.AnimationId = "rbxassetid://89289879"
+local swing = player.Character.Humanoid:LoadAnimation(Anim)
+
+local lastPressTime = 0
+tool.Activated:Connect(function()
+  local currentTime = tick()
+            if currentTime - lastPressTime >= 2 then
+                lastPressTime = currentTime 
+sound = Instance.new("Sound", tool:FindFirstChild("Handle"))
+swing:Play()
+task.wait(.6)
+sound.SoundId = "rbxassetid://2156366946"
+sound.Volume = 1.5
+sound.PlaybackSpeed = 1
+sound.Looped = false
+sound:Play()
+local foundHumanoids = {}
+for _, v in pairs(workspace:GetDescendants()) do
+    if v:IsA("Humanoid") and v.RootPart and v.RootPart.Parent ~= player.Character then
+        local distance = (v.RootPart.Position - tool:FindFirstChild("Handle").Position).magnitude
+        if distance <= 6 then
+            table.insert(foundHumanoids, v)
+        end
+    end
+end
+
+for _, humanoid in pairs(foundHumanoids) do
+ humanoid:TakeDamage(65)
+ humanoid:ChangeState("FallingDown")
+local recoilDirection = (tool:FindFirstChild("Handle").Position - humanoid.RootPart.Position).Unit
+ humanoid.RootPart.Velocity += recoilDirection * 100
+sound = Instance.new("Sound", humanoid.RootPart)
+sound.SoundId = "rbxassetid://8348700441"
+sound.Volume = 2
+sound.PlaybackSpeed = 1
+sound.Looped = false
+sound:Play()
+end
+            end
+end)
+end
+    end)
+    
+repeat game:GetService("RunService").Heartbeat:Wait()
+	if box.Velocity.Y > 35 then
+		repeat game:GetService("RunService").Heartbeat:Wait() until box.Velocity.Y <= 0
+isbreaking = true
+sound = Instance.new("Sound", box)
+sound.SoundId = "rbxassetid://6629890936"
+sound.Volume = 1
+sound.PlaybackSpeed = 1
+sound.Looped = false
+sound:Play()
+ task.wait(2)
+ box:Destroy()
+	end
+until box.Parent == nil or isbreaking == true
+end
